@@ -75,3 +75,59 @@ This endpoint removes the user with ID 1 from the database.
 
 #### Add a user to a group (POST `/groups/1/users/3`):
 This endpoint adds user ID 3 to group ID 1.
+
+## Form Routes
+### `/forms` [GET, POST]
+- **GET**: Returns a list of all forms.
+- **POST**: Creates a new form with the data sent in the body of the request, including title, color, image, associated group ID, and a list of components. the forms.
+### `/forms/<int:form_id>` [GET, PUT, DELETE]
+- **GET**: Returns data for a specific form based on form_id.
+- **PUT**: Update an existing form.
+- **DELETE**: Remove a form from the database.
+### `/forms/<int:form_id>/components` [GET, POST]
+- **GET**: Returns all components of a specific form.
+- **POST**: Adds a new component to the form, including type, title, and options if any.
+### `/forms/<int:form_id>/components/<int:component_id>` [DELETE]
+- **DELETE**: Removes a specific component from a form.
+### `/components/<int:component_id>/options` [GET, POST]
+- **GET**: Returns all options for a specific component.
+- **POST**: Adds a new option to the component.
+### `/components/<int:component_id>/options/<int:option_id>` [DELETE]
+- **DELETE**: Removes a specific option from a component.
+### Request Examples
+
+#### Create a form (POST /forms)
+```json
+{
+    "title": "Pesquisa de Satisfação",
+    "color": "#ff5733",
+    "image": "",
+    "group": 1,
+    "components": [
+        {
+            "type": "multiple",
+            "title": "Como você avalia o ambiente de trabalho?",
+            "options": ["Excelente", "Bom", "Razoável", "Ruim"]
+        },
+        {
+            "type": "text_field",
+            "title": "Sugestões para melhorias",
+            "options": []
+        }
+    ]
+}
+```
+#### Add a component to a form (POST /forms/1/components)
+```json
+{
+    "type": "single_field",
+    "title": "Qual é o seu setor de trabalho?",
+    "options": []
+}
+```
+#### Add an option to a component (POST /components/1/options)
+```json
+{
+    "option": "Muito Satisfeito"
+}
+```
