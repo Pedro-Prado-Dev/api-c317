@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 BASEDIR = os.path.dirname(os.path.abspath("../main.py"))
-URL_API = os.getenv("URL_API", "sqlite:///:memory:")
+URL_API = "mysql://root:EvaIxiaYyFNCMSvdFprkdVCcQFigiplB@autorack.proxy.rlwy.net:33116/railway"
 STATIC_FOLDER = os.path.join(sys._MEIPASS, "static") if getattr(sys, "frozen", False) else "static"
 TEMPLATE_FOLDER = os.path.join(sys._MEIPASS, "templates") if getattr(sys, "frozen", False) else "templates"
 
