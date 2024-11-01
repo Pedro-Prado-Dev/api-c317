@@ -1,7 +1,8 @@
-from flask import request, jsonify
+from flask import jsonify, request
 from flask_restful import Resource
-from app.extensions import db, api
-from app.form.model import Form, FormComponent, ComponentOption
+
+from app.extensions import api, db
+from app.form.model import ComponentOption, Form, FormComponent
 
 
 class FormResource(Resource):
@@ -18,18 +19,12 @@ class FormResource(Resource):
     def post(self):
         data = request.get_json()
         new_form = Form(
-            title=data.get('title'),
-            color=data.get('color'),
-            image=data.get('image'),
-            group_id=data.get('group')
+            title=data.get("title"), color=data.get("color"), image=data.get("image"), group_id=data.get("group")
         )
 
-        for comp_data in data.get('components', []):
-            component = FormComponent(
-                type=comp_data['type'],
-                title=comp_data['title']
-            )
-            for opt in comp_data.get('options', []):
+        for comp_data in data.get("components", []):
+            component = FormComponent(type=comp_data["type"], title=comp_data["title"])
+            for opt in comp_data.get("options", []):
                 option = ComponentOption(option=opt)
                 component.options.append(option)
             new_form.components.append(component)
@@ -44,10 +39,10 @@ class FormResource(Resource):
         if not form:
             return {"message": "Form not found"}, 404
 
-        form.title = data.get('title', form.title)
-        form.color = data.get('color', form.color)
-        form.image = data.get('image', form.image)
-        form.group_id = data.get('group', form.group_id)
+        form.title = data.get("title", form.title)
+        form.color = data.get("color", form.color)
+        form.image = data.get("image", form.image)
+        form.group_id = data.get("group", form.group_id)
 
         db.session.commit()
         return form.to_dict(), 200
@@ -59,6 +54,7 @@ class FormResource(Resource):
         db.session.delete(form)
         db.session.commit()
         return {"message": "Form deleted"}, 200
+
 
 class FormComponentResource(Resource):
     def get(self, form_id, component_id=None):
@@ -80,12 +76,9 @@ class FormComponentResource(Resource):
             return {"message": "Form not found"}, 404
 
         data = request.get_json()
-        component = FormComponent(
-            type=data['type'],
-            title=data['title']
-        )
+        component = FormComponent(type=data["type"], title=data["title"])
 
-        for opt in data.get('options', []):
+        for opt in data.get("options", []):
             option = ComponentOption(option=opt)
             component.options.append(option)
 
@@ -116,7 +109,7 @@ class ComponentOptionResource(Resource):
             return {"message": "Component not found"}, 404
 
         data = request.get_json()
-        option = ComponentOption(option=data['option'])
+        option = ComponentOption(option=data["option"])
         component.options.append(option)
 
         db.session.commit()
@@ -131,6 +124,12 @@ class ComponentOptionResource(Resource):
         return {"message": "Option deleted"}, 200
 
 
-api.add_resource(FormResource, '/forms', '/forms/<int:form_id>')
-api.add_resource(FormComponentResource, '/forms/<int:form_id>/components', '/forms/<int:form_id>/components/<int:component_id>')
-api.add_resource(ComponentOptionResource, '/components/<int:component_id>/options', '/components/<int:component_id>/options/<int:option_id>')
+api.add_resource(FormResource, "/forms", "/forms/<int:form_id>")
+api.add_resource(
+    FormComponentResource, "/forms/<int:form_id>/components", "/forms/<int:form_id>/components/<int:component_id>"
+)
+api.add_resource(
+    ComponentOptionResource,
+    "/components/<int:component_id>/options",
+    "/components/<int:component_id>/options/<int:option_id>",
+)

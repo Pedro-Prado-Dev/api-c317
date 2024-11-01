@@ -1,8 +1,10 @@
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from app import db
 
+
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -25,8 +27,8 @@ class User(db.Model):
             "phone_number": self.phone_number,
             "email": self.email,
             "role": self.role,
-            "is_adm": self.is_adm
+            "is_adm": self.is_adm,
         }
 
     def __repr__(self):
-        return f'<User {self.name}>'
+        return f"<User {self.name}>"

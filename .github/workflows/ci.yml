@@ -47,3 +47,12 @@ jobs:
       - name: Run tests
         run: |
           python -m unittest discover
+
+  lint_process:
+    stage: lint
+    image: python:3.12
+    script:
+      - pip install flake8==7.0.0 black==24.3.0 isort==5.13.2
+      - black . --check
+      - isort . --check
+      - flake8

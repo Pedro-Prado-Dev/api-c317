@@ -1,10 +1,11 @@
 from flask import Flask
-from app.config import Config
 from flask_cors import CORS
-from app.extensions import db, migrate, api
+
+from app.config import Config
+from app.extensions import api, db, migrate
+from app.form.routes import ComponentOptionResource, FormComponentResource, FormResource
+from app.group.routes import GroupListResource, GroupResource, GroupUserResource
 from app.users.routes import UserResource
-from app.group.routes import GroupUserResource, GroupResource, GroupListResource
-from app.form.routes import FormComponentResource, FormResource, ComponentOptionResource
 
 
 def create_app(config_class=Config):
