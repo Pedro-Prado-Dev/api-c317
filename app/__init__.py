@@ -1,5 +1,6 @@
 from flask import Flask
 from app.config import Config
+from flask_cors import CORS
 from app.extensions import db, migrate, api
 from app.users.routes import UserResource
 from app.group.routes import GroupUserResource, GroupResource, GroupListResource
@@ -13,5 +14,6 @@ def create_app(config_class=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     api.init_app(app)
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     return app
