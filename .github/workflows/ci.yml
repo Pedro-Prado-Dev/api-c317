@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  
+          pip install -r requirements.txt
 
   test:
     runs-on: ubuntu-latest
@@ -42,17 +42,32 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  
+          pip install -r requirements.txt
 
       - name: Run tests
-        run: |
-          python -m unittest discover
+        run: python -m unittest discover
 
-  lint_process:
-    stage: lint
-    image: python:3.12
-    script:
-      - pip install flake8==7.0.0 black==24.3.0 isort==5.13.2
-      - black . --check
-      - isort . --check
-      - flake8
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+
+      - name: Install linting tools
+        run: |
+          pip install flake8==7.0.0 black==24.3.0 isort==5.13.2
+
+      - name: Run Black for code style check
+        run: black . --check
+
+      - name: Run isort for import order check
+        run: isort . --check
+
+      - name: Run flake8 for linting
+        run: flake8
